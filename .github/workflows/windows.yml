@@ -29,9 +29,9 @@ jobs:
         if: ${{ steps.cache.output.cache-hit != 'true' }}
         run: |
           cd ..
-          cmake --build build --config $BUILD_TYPE --terget=fmt -j4
-          cmake --build build --config $BUILD_TYPE --terget=gtest -j4
-          cmake --build build --config $BUILD_TYPE --terget=gtest_main -j4
+          cmake --build build --config $BUILD_TYPE --target=fmt -j4
+          cmake --build build --config $BUILD_TYPE --target=gtest -j4
+          cmake --build build --config $BUILD_TYPE --target=gtest_main -j4
 
       - name: build
         run: cmake --build build --config "$env:BUILD_TYPE" -j4
