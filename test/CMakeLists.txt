@@ -42,6 +42,7 @@ foreach(file ${test_sources})
     set(${CMAKE_PROJECT_NAME}_TEST_LIB ${CMAKE_PROJECT_NAME})
   endif()
 
+  message("using " ${CMAKE_PROJECT_NAME}_TEST_LIB " for unit testing")
   if(${CMAKE_PROJECT_NAME}_USE_GTEST)
     find_package(GTest REQUIRED)
 
