@@ -28,7 +28,8 @@ jobs:
       - name: install thirdparty
         if: ${{ steps.cache.output.cache-hit != 'true' }}
         run: |
-          cd ..
+          ls
+          mkdir
           cmake --build build --config $BUILD_TYPE --target=fmt -j4
           cmake --build build --config $BUILD_TYPE --target=gtest -j4
           cmake --build build --config $BUILD_TYPE --target=gtest_main -j4
