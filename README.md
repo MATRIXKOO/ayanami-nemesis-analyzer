@@ -1,8 +1,8 @@
-[![Actions Status](https://github.com/filipdutescu/ayanami-nemesis-analyzer/workflows/MacOS/badge.svg)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/actions)
-[![Actions Status](https://github.com/filipdutescu/ayanami-nemesis-analyzer/workflows/Windows/badge.svg)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/actions)
-[![Actions Status](https://github.com/filipdutescu/ayanami-nemesis-analyzer/workflows/Ubuntu/badge.svg)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/actions)
-[![codecov](https://codecov.io/gh/filipdutescu/ayanami-nemesis-analyzer/branch/master/graph/badge.svg)](https://codecov.io/gh/filipdutescu/ayanami-nemesis-analyzer)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/filipdutescu/ayanami-nemesis-analyzer)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/releases)
+[![Actions Status](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/workflows/MacOS/badge.svg)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/actions)
+[![Actions Status](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/workflows/Windows/badge.svg)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/actions)
+[![Actions Status](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/workflows/Ubuntu/badge.svg)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/actions)
+[![codecov](https://codecov.io/gh/MATRIXKOO/ayanami-nemesis-analyzer/branch/master/graph/badge.svg)](https://codecov.io/gh/MATRIXKOO/ayanami-nemesis-analyzer)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/MATRIXKOO/ayanami-nemesis-analyzer)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/releases)
 
 # Ayanami Nemesis Analyzer
 
@@ -21,25 +21,21 @@ of how to integrate such plugins into a standalone project.
 
 ==============================================
 
-1. Clone the demo repository.
-
-        git clone https://github.com/nsumner/clang-plugins-demo.git
-
-2. Create a new directory for building.
+1. Create a new directory for building.
 
         mkdir build
 
-3. Change into the new directory.
+2. Change into the new directory.
 
         cd build
 
-4. Run CMake with the path to the LLVM source.
+3. Run CMake with the path to the LLVM source.
 
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
             -DLLVM_DIR=</path/to/LLVM/build>/lib/cmake/llvm/ \
             ../clang-plugins-demo
 
-5. Run make inside the build directory:
+4. Run make inside the build directory:
 
         make
 
