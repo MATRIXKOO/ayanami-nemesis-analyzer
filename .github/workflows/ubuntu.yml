@@ -32,7 +32,7 @@ jobs:
           ls
           mkdir build
           cd build
-          cmake
+          cmake ..
           cd ..
           cmake --build build --config $BUILD_TYPE --target=fmt -j4
           cmake --build build --config $BUILD_TYPE --target=gtest -j4
