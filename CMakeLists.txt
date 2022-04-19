@@ -5,10 +5,17 @@ cmake_minimum_required(VERSION 3.15)
 #
 
 project(
-  "Project"
+  "ANA"
   VERSION 0.1.0
+  DESCRIPTION "ayanami-nemesis-analyzer" 
   LANGUAGES CXX
 )
+# TODO: make use local libraries is optional
+set(BUILD_SHARED_LIBS on)
+set(${PROJECT_NAME}_ENABLE_UNIT_TESTING ON)
+set(${PROJECT_NAME}_BUILD_EXECUTABLE ON)
+add_subdirectory(fmt)
+add_subdirectory(googletest)
 
 #
 # Set project options
@@ -155,6 +162,14 @@ include(cmake/Doxygen.cmake)
 #
 # Model project dependencies
 #
+
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(
+ ${PROJECT_NAME}
+ PRIVATE
+ fmt::fmt
+  
+)
 
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
@@ -355,7 +370,11 @@ message(STATUS "Finished building requirements for installing the package.\n")
 #
 # Unit testing setup
 #
-
+# TODO: deal with the fucking problem
+set(GTEST_DIR  "build/googletest/googletest/generated/")
+set(GTEST_LIBRARY "build/lib/libgtest.a")
+set(GTEST_INCLUDE_DIR "googletest/googletest/include")
+set(GTEST_MAIN_LIBRARY "build/lib/libgtest_main.a")
 if(${PROJECT_NAME}_ENABLE_UNIT_TESTING)
   enable_testing()
   message(STATUS "Build unit tests for the project. Tests should always be found in the test folder\n")
