@@ -1,206 +1,98 @@
-[![Actions Status](https://github.com/filipdutescu/modern-cpp-template/workflows/MacOS/badge.svg)](https://github.com/filipdutescu/modern-cpp-template/actions)
-[![Actions Status](https://github.com/filipdutescu/modern-cpp-template/workflows/Windows/badge.svg)](https://github.com/filipdutescu/modern-cpp-template/actions)
-[![Actions Status](https://github.com/filipdutescu/modern-cpp-template/workflows/Ubuntu/badge.svg)](https://github.com/filipdutescu/modern-cpp-template/actions)
-[![codecov](https://codecov.io/gh/filipdutescu/modern-cpp-template/branch/master/graph/badge.svg)](https://codecov.io/gh/filipdutescu/modern-cpp-template)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/filipdutescu/modern-cpp-template)](https://github.com/filipdutescu/modern-cpp-template/releases)
+[![Actions Status](https://github.com/filipdutescu/ayanami-nemesis-analyzer/workflows/MacOS/badge.svg)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/actions)
+[![Actions Status](https://github.com/filipdutescu/ayanami-nemesis-analyzer/workflows/Windows/badge.svg)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/actions)
+[![Actions Status](https://github.com/filipdutescu/ayanami-nemesis-analyzer/workflows/Ubuntu/badge.svg)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/actions)
+[![codecov](https://codecov.io/gh/filipdutescu/ayanami-nemesis-analyzer/branch/master/graph/badge.svg)](https://codecov.io/gh/filipdutescu/ayanami-nemesis-analyzer)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/filipdutescu/ayanami-nemesis-analyzer)](https://github.com/filipdutescu/ayanami-nemesis-analyzer/releases)
 
-# Modern C++ Template
+# Ayanami Nemesis Analyzer
 
-A quick C++ template for modern CMake projects, aimed to be an easy to use
-starting point.
+These plugins and programs are demonstrations of how to create and use the
+plugin infrastructure of clang for analyzing ASTs or integrating with the
+clang static analyzer.
 
-This is my personal take on such a type of template, thus I might not use the
-best practices or you might disagree with how I do things. Any and all feedback
-is greatly appreciated!
+The AST plugin prints out the names of functions found when parsing a file.
+The static analyzer plugin is the SimpleStreamChecker from the clang code
+base (as well as [How to write a checker in 24 hours][0] by Anna Zaks and
+Jordan Rose). It identifies issues in handling `FILE`s in C program.
+Neither plugin is a contribution here. This project just provides an example
+of how to integrate such plugins into a standalone project.
 
-## Features
+## Building with CMake
 
-* Modern **CMake** configuration and project, which, to the best of my
-knowledge, uses the best practices,
+==============================================
 
-* An example of a **Clang-Format** config, inspired from the base *Google* model,
-with minor tweaks. This is aimed only as a starting point, as coding style
-is a subjective matter, everyone is free to either delete it (for the *LLVM*
-default) or supply their own alternative,
+1. Clone the demo repository.
 
-* **Static analyzers** integration, with *Clang-Tidy* and *Cppcheck*, the former
-being the default option,
+        git clone https://github.com/nsumner/clang-plugins-demo.git
 
-* **Doxygen** support, through the `ENABLE_DOXYGEN` option, which you can enable
-if you wish to use it,
+2. Create a new directory for building.
 
-* **Unit testing** support, through *GoogleTest* (with an option to enable
-*GoogleMock*) or *Catch2*,
+        mkdir build
 
-* **Code coverage**, enabled by using the `ENABLE_CODE_COVERAGE` option, through
-*Codecov* CI integration,
+3. Change into the new directory.
 
-* **Package manager support**, with *Conan* and *Vcpkg*, through their respective
-options
+        cd build
 
-* **CI workflows for Windows, Linux and MacOS** using *GitHub Actions*, making
-use of the caching features, to ensure minimum run time,
+4. Run CMake with the path to the LLVM source.
 
-* **.md templates** for: *README*, *Contributing Guideliness*,
-*Issues* and *Pull Requests*,
+        cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
+            -DLLVM_DIR=</path/to/LLVM/build>/lib/cmake/llvm/ \
+            ../clang-plugins-demo
 
-* **Permissive license** to allow you to integrate it as easily as possible. The
-template is licensed under the [Unlicense](https://unlicense.org/),
+5. Run make inside the build directory:
 
-* Options to build as a header-only library or executable, not just a static or
-shared library.
+        make
 
-* **Ccache** integration, for speeding up rebuild times
+This produces standalone tools called `bin/print-functions` and
+`bin/runstreamchecker`. Loadable plugin variants of the analyses are also
+produced inside `lib/`.
 
-## Getting Started
+Note, building with a tool like ninja can be done by adding `-G Ninja` to
+the cmake invocation and running ninja instead of make.
 
-These instructions will get you a copy of the project up and running on your local
-machine for development and testing purposes.
+Running
+==============================================
 
-### Prerequisites
+Both the AST plugins and clang static analyzer plugins can be run via
+standalone programs or via extra command line arguments to clang. The
+provided standalone variants can operate on individual files or on
+compilation databases, but compilation databases are somewhat easier to
+work with.
 
-This project is meant to be only a template, thus versions of the software used
-can be change to better suit the needs of the developer(s). If you wish to use the
-template *as-is*, meaning using the versions recommended here, then you will need:
+AST Plugins
+-------------
 
-* **CMake v3.15+** - found at [https://cmake.org/](https://cmake.org/)
+To load and run AST plugins dynamically in clang, you can use:
 
-* **C++ Compiler** - needs to support at least the **C++17** standard, i.e. *MSVC*,
-*GCC*, *Clang*
+        clang -fplugin=lib/libfunction-printer-plugin.so -c ../test/functions.c
 
-> ***Note:*** *You also need to be able to provide ***CMake*** a supported
-[generator](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html).*
+To run the plugin via the standalone program:
 
-### Installing
+        bin/print-functions -- clang -c ../test/functions.c
 
-It is fairly easy to install the project, all you need to do is clone if from
-[GitHub](https://github.com/filipdutescu/modern-cpp-template) or
-[generate a new repository from it](https://github.com/filipdutescu/modern-cpp-template/generate)
-(also on **GitHub**).
+Note that this will require you to put the paths to all headers in the command
+line (using `-I`) or they will not be found. It can be simpler to instead use
+a compilation database:
 
-If you wish to clone the repository, rather than generate from it, you simply need
-to run:
+        bin/print-functions -p compile_commands.json
 
-```bash
-git clone https://github.com/filipdutescu/modern-cpp-template/
-```
+## Clang Static Analyzer Plugins
 
-After finishing getting a copy of the project, with any of the methods above, create
-a new folder in the `include/` folder, with the name of your project.  Edit
-`cmake/SourcesAndHeaders.cmake` to add your files.
+-----------------------------
 
-You will also need to rename the `cmake/ProjectConfig.cmake.in` file to start with
-the ***exact name of your project***. Such as `cmake/MyNewProjectConfig.cmake.in`.
-You should also make the same changes in the GitHub workflows provided, notably
-[`.github/workflows/ubuntu.yml`](.github/workflows/ubuntu.yml), in which you should
-replace the CMake option `-DProject_ENABLE_CODE_COVERAGE=1` to
-`-DMyNewProject_ENABLE_CODE_COVERAGE=1`.
+To load and run a static analyzer plugin dynamically in clang, use:
 
-Finally, change `"Project"` from `CMakeLists.txt`, from
+        clang -fsyntax-only -fplugin=lib/libstreamchecker.so \
+          -Xclang -analyze -Xclang -analyzer-checker=demo.streamchecker \
+          ../clang-plugins-demo/test/files.c
 
-```cmake
-project(
-  "Project"
-  VERSION 0.1.0
-  LANGUAGES CXX
-)
-```
+To run the plugin via the standalone program:
 
-to the ***exact name of your project***, i.e. using the previous name it will become:
+        bin/runstreamchecker -- clang -c ../clang-plugins-demo/test/files.c
 
-```cmake
-project(
-  MyNewProject
-  VERSION 0.1.0
-  LANGUAGES CXX
-)
-```
+Again, missing headers are likely, and using a compilation database is the
+preferred and simplest way to work around this issue. Note that clang comes
+with scripts that can build a compilation database for an existing project.
 
-To install an already built project, you need to run the `install` target with CMake.
-For example:
 
-```bash
-cmake --build build --target install --config Release
-
-# a more general syntax for that command is:
-cmake --build <build_directory> --target install --config <desired_config>
-```
-
-## Building the project
-
-To build the project, all you need to do, ***after correctly
-[installing the project](README.md#Installing)***, is run a similar **CMake** routine
-to the the one below:
-
-```bash
-mkdir build/ && cd build/
-cmake .. -DCMAKE_INSTALL_PREFIX=/absolute/path/to/custom/install/directory
-cmake --build . --target install
-```
-
-> ***Note:*** *The custom ``CMAKE_INSTALL_PREFIX`` can be omitted if you wish to
-install in [the default install location](https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html).*
-
-More options that you can set for the project can be found in the
-[`cmake/StandardSettings.cmake` file](cmake/StandardSettings.cmake). For certain
-options additional configuration may be needed in their respective `*.cmake` files
-(i.e. Conan needs the `CONAN_REQUIRES` and might need the `CONAN_OPTIONS` to be setup
-for it work correctly; the two are set in the [`cmake/Conan.cmake` file](cmake/Conan.cmake)).
-
-## Generating the documentation
-
-In order to generate documentation for the project, you need to configure the build
-to use Doxygen. This is easily done, by modifying the workflow shown above as follows:
-
-```bash
-mkdir build/ && cd build/
-cmake .. -D<project_name>_ENABLE_DOXYGEN=1 -DCMAKE_INSTALL_PREFIX=/absolute/path/to/custom/install/directory
-cmake --build . --target doxygen-docs
-```
-
-> ***Note:*** *This will generate a `docs/` directory in the **project's root directory**.*
-
-## Running the tests
-
-By default, the template uses [Google Test](https://github.com/google/googletest/)
-for unit testing. Unit testing can be disabled in the options, by setting the
-`ENABLE_UNIT_TESTING` (from
-[cmake/StandardSettings.cmake](cmake/StandardSettings.cmake)) to be false. To run
-the tests, simply use CTest, from the build directory, passing the desire
-configuration for which to run tests for. An example of this procedure is:
-
-```bash
-cd build          # if not in the build directory already
-ctest -C Release  # or `ctest -C Debug` or any other configuration you wish to test
-
-# you can also run tests with the `-VV` flag for a more verbose output (i.e.
-#GoogleTest output as well)
-```
-
-### End to end tests
-
-If applicable, should be presented here.
-
-### Coding style tests
-
-If applicable, should be presented here.
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our how you can
-become a contributor and the process for submitting pull requests to us.
-
-## Versioning
-
-This project makes use of [SemVer](http://semver.org/) for versioning. A list of
-existing versions can be found in the
-[project's releases](https://github.com/filipdutescu/modern-cpp-template/releases).
-
-## Authors
-
-* **Filip-Ioan Dutescu** - [@filipdutescu](https://github.com/filipdutescu)
-
-## License
-
-This project is licensed under the [Unlicense](https://unlicense.org/) - see the
-[LICENSE](LICENSE) file for details
+[0]: http://llvm.org/devmtg/2012-11/Zaks-Rose-Checker24Hours.pdf
