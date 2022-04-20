@@ -5,6 +5,24 @@
 #include <type_traits>
 namespace ANA
 {
+  // A helper function to remove pointer from a type.
+  namespace tools
+  {
+    template<typename T>
+    class RemovePointer
+    {
+     public:
+      typedef T Result;
+    };
+
+    template<typename T>
+    class RemovePointer<T *>
+    {
+     public:
+      typedef T Result;
+    };
+  }  // namespace tools
+
   template<typename Type>
   class CouldNotBeAdressedType
   {
@@ -13,6 +31,7 @@ namespace ANA
     ~CouldNotBeAdressedType() = default;
     CouldNotBeAdressedType(const CouldNotBeAdressedType &) = delete;
     CouldNotBeAdressedType &operator=(const CouldNotBeAdressedType &) = delete;
+    CouldNotBeAdressedType operator&() const = delete;
     Type wrapper;
     inline void __SHOULD_NOT_BE_ADDRESSED();
   };
@@ -36,23 +55,36 @@ namespace ANA
   concept Pointee = std::destructible<Type> && GetAdressable<Type>;
 
   // concept means can be used as pointer
-  // TODO: reimplement the helper function
+  // TODO: reimplement the elper function
+
+  template<typename Type>
+  constexpr bool IsPointeeNoArg()
+  {
+    if constexpr (std::is_pointer<Type>::value)
+    {
+      return IsPointeeNoArg<tools::RemovePointer<Type>::Result>();
+    }
+    if constexpr (Pointee<Type>)
+    {
+      return true;
+    }
+    return false;
+  }
+
   template<typename Type>
   constexpr bool IsPointee(Type t)
   {
+    if constexpr (std::is_pointer<Type>::value)
+    {
+      return IsPointeeNoArg<tools::RemovePointer<Type>::Result>();
+    }
     if constexpr (Pointee<Type>)
     {
-      if constexpr (requires { *t; })
-      {
-        return IsPointee<decltype(t)>(t);
-      }
       return true;
     }
-    else
-    {
-      return false;
-    }
+    return false;
   }
+
   template<class Type>
   concept PointerAble = requires(Type pointer)
   {

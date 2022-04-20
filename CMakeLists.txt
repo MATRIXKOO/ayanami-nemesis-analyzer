@@ -12,6 +12,7 @@ project(
 )
 # TODO: make use local libraries is optional
 set(BUILD_SHARED_LIBS on)
+set(CMAKE_CXX_STANDARD 20)
 set(${PROJECT_NAME}_ENABLE_UNIT_TESTING ON)
 set(${PROJECT_NAME}_BUILD_EXECUTABLE ON)
 add_subdirectory(fmt)
