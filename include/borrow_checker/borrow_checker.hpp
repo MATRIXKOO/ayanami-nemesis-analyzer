@@ -23,6 +23,7 @@ namespace ANA
     };
   }  // namespace tools
 
+  // A helper class to check if a type can be adressed.
   template<typename Type>
   class CouldNotBeAdressedType
   {

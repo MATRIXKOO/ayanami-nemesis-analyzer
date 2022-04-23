@@ -1,6 +1,5 @@
 #include "borrow_checker/borrow_checker.hpp"
 
-#include <__utility/integer_sequence.h>
 #include <gtest/gtest.h>
 
 #include <concepts>
