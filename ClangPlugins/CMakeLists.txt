@@ -33,3 +33,5 @@ add_compile_options(
 
 # add subdirectory
 add_subdirectory(function-printer)
+add_subdirectory(assign-or-float-compin-branch-cond-checker)
+add_subdirectory(sample-checker)
