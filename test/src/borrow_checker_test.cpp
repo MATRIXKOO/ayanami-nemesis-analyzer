@@ -18,7 +18,7 @@ TEST(borrow_checker, ConceptPointee)
   ASSERT_EQ(true, Pointee<std::string>);
   ASSERT_EQ(true, Pointee<std::unique_ptr<int>>);
 
-  // const
+  // const pointee
   ASSERT_EQ(true, Pointee<const int>);
   ASSERT_EQ(true, Pointee<const std::string>);
 

@@ -371,10 +371,12 @@ message(STATUS "Finished building requirements for installing the package.\n")
 # Unit testing setup
 #
 # TODO: deal with the fucking problem
+
 set(GTEST_DIR  "build/googletest/googletest/generated/")
 set(GTEST_LIBRARY "build/lib/libgtest.a")
 set(GTEST_INCLUDE_DIR "googletest/googletest/include")
 set(GTEST_MAIN_LIBRARY "build/lib/libgtest_main.a")
+
 if(${PROJECT_NAME}_ENABLE_UNIT_TESTING)
   enable_testing()
   message(STATUS "Build unit tests for the project. Tests should always be found in the test folder\n")
