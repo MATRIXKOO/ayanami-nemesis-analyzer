@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 
 #
 # Project details
@@ -15,9 +15,21 @@ set(BUILD_SHARED_LIBS on)
 set(CMAKE_CXX_STANDARD 20)
 set(${PROJECT_NAME}_ENABLE_UNIT_TESTING ON)
 set(${PROJECT_NAME}_BUILD_EXECUTABLE ON)
+set(EnablesClangPlugins on)
 add_subdirectory(fmt)
 add_subdirectory(googletest)
 
+#
+# Deal with Project Options
+if (EnablesClangPlugins)
+  set(LLVM_DIR  /Volumes/CODE/llvm-project/build/lib/cmake/llvm) # you can reload the llvm dir
+  set(Clang_DIR /Volumes/CODE/llvm-project/build/lib/cmake/clang)# I use my own version of llvm  
+  add_subdirectory(ClangPlugins)
+  add_subdirectory(TestANA)
+  
+endif ()
+
+#
 #
 # Set project options
 #
@@ -77,6 +89,9 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     foreach(source IN LISTS exe_sources)
       verbose_message("* ${source}")
     endforeach()
+
+
+
   endif()
 
   if(${PROJECT_NAME}_ENABLE_UNIT_TESTING)
@@ -170,6 +185,8 @@ target_link_libraries(
  PRIVATE
  fmt::fmt 
 )
+
+# TODO: make llvm path is a option
 
 # Identify and link with the specific "packages" the project uses
 #find_package(package_name package_version REQUIRED package_type [other_options])
@@ -370,7 +387,7 @@ message(STATUS "Finished building requirements for installing the package.\n")
 #
 # Unit testing setup
 #
-# TODO: deal with the fucking problem
+# TODO: use customsized gtest
 
 set(GTEST_DIR  "build/googletest/googletest/generated/")
 set(GTEST_LIBRARY "build/lib/libgtest.a")
@@ -378,7 +395,5 @@ set(GTEST_INCLUDE_DIR "googletest/googletest/include")
 set(GTEST_MAIN_LIBRARY "build/lib/libgtest_main.a")
 
 if(${PROJECT_NAME}_ENABLE_UNIT_TESTING)
-  enable_testing()
-  message(STATUS "Build unit tests for the project. Tests should always be found in the test folder\n")
   add_subdirectory(test)
 endif()
