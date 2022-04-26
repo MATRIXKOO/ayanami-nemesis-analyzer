@@ -31,5 +31,5 @@ add_compile_options(
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/clang-plugin)
 # add subdirectory
 add_subdirectory(function-printer)
-add_subdirectory(assign-or-float-compin-branch-cond-checker)
 add_subdirectory(sample-checker)
+add_subdirectory(assign-or-float-compin-branch-cond-checker)
