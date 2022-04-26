@@ -31,6 +31,7 @@ add_compile_options(
   "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<CONFIG:DEBUG>>:-fno-omit-frame-pointer>"
 )
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/clang-plugin)
 # add subdirectory
 add_subdirectory(function-printer)
 add_subdirectory(assign-or-float-compin-branch-cond-checker)
