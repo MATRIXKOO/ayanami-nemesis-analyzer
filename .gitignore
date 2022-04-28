@@ -3,6 +3,8 @@
 CMakeCache.*
 CMakeFiles/*
 [Tt]esting/*
+### .github
+.github/workflows/*
 
 ### VisualStudioCode ###
 .vscode/*
@@ -367,3 +369,4 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 TestANA/.lit_test_times.txt
+
