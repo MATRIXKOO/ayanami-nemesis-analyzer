@@ -92,6 +92,8 @@ namespace ANA
     IsPointee(*pointer) == true;
   };
 
+  // A helper namespace to check if a type can be adressed.
+
   namespace BasicType
   {
     using CouldNotBeAdressedInt = CouldNotBeAdressedType<int>;
