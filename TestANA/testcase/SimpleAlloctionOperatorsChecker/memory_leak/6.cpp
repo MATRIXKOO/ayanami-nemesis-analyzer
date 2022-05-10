@@ -1,14 +1,21 @@
 // RUN: %ClangPath/clang++ -cc1 -load  %PluginPath/ANA_SimpleAllocationOperatorsChecker.dylib \
 // RUN: -analyze -analyzer-checker=ANA.DeleteOperatorChecker \
-// RUN: %s 2>&1
+// RUN: %s 2>&1 | FileCheck %s
+//  CHECK-LABEL:   warning: You haven't released allocated memory [ANA.DeleteOperatorChecker]
 class A
 {
 };
 
 void test_6()
 {
-  if (0)
+  A* obj = new A();
+  bool condition = &test_6;  // get a unknown boolean
+  if (!condition)
   {
-    A* obj = new A();  // This shouldn't generate warning
+    delete obj;
+  }
+  else
+  {
+    // no delete at all
   }
 }
