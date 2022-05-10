@@ -26,9 +26,11 @@ foobar.cpp
 
 ## dependencies
 
-you can make your own dependencys conan or vcpkg
-{fmt} and google , or use the git submodule
-use llvm@15 or higher
+you can make your own dependencys，
+
+use conan or vcpkg install {fmt} and google , or use the git submodule
+
+install llvm@15 or higher
 
 ## build
 
