@@ -6,89 +6,63 @@
 
 # Ayanami Nemesis Analyzer
 
-These plugins and programs are demonstrations of how to create and use the
-plugin infrastructure of clang for analyzing ASTs or integrating with the
-clang static analyzer.
+ANAlyzer is a analyze tool that can be used to analyze the CPP memory leaks (or more?). And checks collections. Including fews Concepts librarys which used C++20.
+Now It is based on Clang Static Analyzer, I want to make it as a static analyzer that can be used analyze languages which gereated their codes to LLVM IR.
+And I will implement some features that can be used to analyze the language.(all algorithms in static analysis of or program analysis)
 
-The AST plugin prints out the names of functions found when parsing a file.
-The static analyzer plugin is the SimpleStreamChecker from the clang code
-base (as well as [How to write a checker in 24 hours][0] by Anna Zaks and
-Jordan Rose). It identifies issues in handling `FILE`s in C program.
-Neither plugin is a contribution here. This project just provides an example
-of how to integrate such plugins into a standalone project.
+For a long time, how to quickly find loopholes and find various potential errors in programs as far as possible has been an important issue in the computer science community. This issue has also been highly valued by large international software companies. In industry, people often use different detection methods to find bugs in software and improve the quality of software. Different from the dynamic testing method, we can also directly analyze the program code without running the software and find some errors. This kind of method is called static analysis. It is an important research direction in the field of programming language and compilation and software engineering. A relatively well-known early-developed static analysis tool is lint, which mainly checks for security issues in the C language. In recent years, static analysis technology has gradually attracted the attention of scholars in the fields of operating systems and information security. Some core semantics proposed by the Rust language can also as a reference to other languages. This paper focuses on the security enhancement of C++ and uses static analysis technology to analyze the memory problems of C++. The harm caused by the vulnerability, etc., for pointers and other problems, the corresponding solutions are given, and a borrow check library similar to Rust is provided for developers. Several checks are implemented based on the Clang Static Analyzer, which has advantages over existing static analysis tools.
 
-## Building with CMake
+# useage
 
-==============================================
+download my release but remember to use llvm@15 or higher.
+and run the command.
 
-1. Create a new directory for building.
+```bash
+ /path/to/install/clang++ -cc1 -load ANA.dylib \
+ -analyze -analyzer-checker=ANA \
+foobar.cpp
+```
 
-        mkdir build
+# building
 
-2. Change into the new directory.
+## dependencies
 
-        cd build
+you can make your own dependencys conan or vcpkg
+{fmt} and google , or use the git submodule
+use llvm@15 or higher
 
-3. Run CMake with the path to the LLVM source.
+## build
 
-        cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-            -DLLVM_DIR=</path/to/LLVM/build>/lib/cmake/llvm/ \
-            ../clang-plugins-demo
+first, you need to install all dependencies.
+and then, you can build.
 
-4. Run make inside the build directory:
+```bash
+mkdir build
+cd build
+cmake .. -G Ninja # optional  obviously
+ninja
+```
 
-        make
+we get the following targets.
+ClangPlugins
+├── assign-or-float-compIn-branch-cond-checker
+├── CMakeLists.txt
+├── function-printer
+├── sample-checker
+└── simple-allocation-operators-checker
 
-This produces standalone tools called `bin/print-functions` and
-`bin/runstreamchecker`. Loadable plugin variants of the analyses are also
-produced inside `lib/`.
+build the analyzer. you want to.
 
-Note, building with a tool like ninja can be done by adding `-G Ninja` to
-the cmake invocation and running ninja instead of make.
+## test
 
-Running
-==============================================
+just simple see the example in the Test directory.
+./runALLtest.sh
 
-Both the AST plugins and clang static analyzer plugins can be run via
-standalone programs or via extra command line arguments to clang. The
-provided standalone variants can operate on individual files or on
-compilation databases, but compilation databases are somewhat easier to
-work with.
+## benchmark
 
-AST Plugins
--------------
+### Dependency
 
-To load and run AST plugins dynamically in clang, you can use:
+install the following dependencies.
+fd -- you must install fd ( <https://github.com/sharkdp/fd> ) first
 
-        clang -fplugin=lib/libfunction-printer-plugin.so -c ../test/functions.c
-
-To run the plugin via the standalone program:
-
-        bin/print-functions -- clang -c ../test/functions.c
-
-Note that this will require you to put the paths to all headers in the command
-line (using `-I`) or they will not be found. It can be simpler to instead use
-a compilation database:
-
-        bin/print-functions -p compile_commands.json
-
-## Clang Static Analyzer Plugins
-
------------------------------
-
-To load and run a static analyzer plugin dynamically in clang, use:
-
-        clang -fsyntax-only -fplugin=lib/libstreamchecker.so \
-          -Xclang -analyze -Xclang -analyzer-checker=demo.streamchecker \
-          ../clang-plugins-demo/test/files.c
-
-To run the plugin via the standalone program:
-
-        bin/runstreamchecker -- clang -c ../clang-plugins-demo/test/files.c
-
-Again, missing headers are likely, and using a compilation database is the
-preferred and simplest way to work around this issue. Note that clang comes
-with scripts that can build a compilation database for an existing project.
-
-
-[0]: http://llvm.org/devmtg/2012-11/Zaks-Rose-Checker24Hours.pdf
+and run the benchmark in the utils
