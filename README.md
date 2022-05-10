@@ -42,12 +42,15 @@ ninja
 ```
 
 we get the following targets.
+
+```
 ClangPlugins
 ├── assign-or-float-compIn-branch-cond-checker
 ├── CMakeLists.txt
 ├── function-printer
 ├── sample-checker
 └── simple-allocation-operators-checker
+```
 
 build the analyzer. you want to.
 
