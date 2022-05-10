@@ -2,15 +2,14 @@
 [![Actions Status](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/workflows/Windows/badge.svg)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/actions)
 [![Actions Status](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/workflows/Ubuntu/badge.svg)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/actions)
 [![codecov](https://codecov.io/gh/MATRIXKOO/ayanami-nemesis-analyzer/branch/master/graph/badge.svg)](https://codecov.io/gh/MATRIXKOO/ayanami-nemesis-analyzer)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/MATRIXKOO/ayanami-nemesis-analyzer)](<https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/releases>
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/MATRIXKOO/ayanami-nemesis-analyzer)](https://github.com/MATRIXKOO/ayanami-nemesis-analyzer/releases)
 
 # Ayanami Nemesis Analyzer
 
 ANA Analyzer is an analysis tool that can be used to analyze the CPP memory leaks (or more?). And checks collections. Including a few Concepts libraries that used C++20. Now It is based on Clang Static Analyzer, I want to make it a static analyzer that can be used to analyze languages that generated their codes to LLVM IR. And I will implement some features that can be used to analyze the language.(all algorithms in a static analysis or program analysis)
 
 For a long time, how to quickly find loopholes and find various potential errors in programs as far as possible has been an important issue in the computer science community. This issue has also been highly valued by large international software companies. In industry, people often use different detection methods to find bugs in software and improve the quality of software. Different from the dynamic testing method, we can also directly analyze the program code without running the software and find some errors. This kind of method is called static analysis. It is an important research direction in the field of programming language and compilation and software engineering. A relatively well-known early-developed static analysis tool is lint, which mainly checks for security issues in the C language. In recent years, static analysis technology has gradually attracted the attention of scholars in the fields of operating systems and information security. Some core semantics proposed by the Rust language can also as a reference to other languages. This paper focuses on the security enhancement of C++ and uses static analysis technology to analyze the memory problems of C++. The harm caused by the vulnerability, etc., for pointers and other problems, the corresponding solutions are given, and a borrow check library similar to Rust is provided for developers. Several checks are implemented based on the Clang Static Analyzer, which has advantages over existing static analysis tools.
-
-‹div align=center><img width="150" height="150" src="src=utils/pic/avatar.jpeg"/></div>
+<img width="150" height="150" src="src=utils/pic/avatar.jpeg"/></div>
 
 # useage
 
