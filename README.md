@@ -69,4 +69,4 @@ just simple see the example in the Test directory.
 install the following dependencies.
 fd -- you must install fd ( <https://github.com/sharkdp/fd> ) first
 
-and run the benchmark in the utils
+and run the benchmark in the utils.
