@@ -38,17 +38,17 @@ namespace ANA
   };
 
   template<typename Type>
-  concept CouldNotBeAdressed = requires(Type t)
-  {
+  concept CouldNotBeAdressed = requires(Type t) {
     {
       t.__SHOULD_NOT_BE_ADDRESSED()
-      } -> std::same_as<void>;
+    } -> std::same_as<void>;
   };
 
   template<typename Type>
-  concept GetAdressable = !CouldNotBeAdressed<Type> && requires(Type t)
-  {
-    { &t };
+  concept GetAdressable = !CouldNotBeAdressed<Type> && requires(Type t) {
+    {
+      &t
+    };
   };
 
   // concept means can be used as pointee
@@ -87,10 +87,7 @@ namespace ANA
   }
 
   template<class Type>
-  concept PointerAble = requires(Type pointer)
-  {
-    IsPointee(*pointer) == true;
-  };
+  concept PointerAble = requires(Type pointer) { IsPointee(*pointer) == true; };
 
   // A helper namespace to check if a type can be adressed.
 

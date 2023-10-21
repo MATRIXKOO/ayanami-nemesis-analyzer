@@ -15,10 +15,10 @@ namespace
 
   class AssignOrFloatCompInBranchCondChecker : public Checker<check::BranchCondition>
   {
-    mutable std::unique_ptr<BuiltinBug> assignBT;
-    mutable std::unique_ptr<BuiltinBug> floatCntBT;
+    mutable std::unique_ptr<BugType> assignBT;
+    mutable std::unique_ptr<BugType> floatCntBT;
 
-    void ReportBug(CheckerContext &Ctx, SourceRange range, std::unique_ptr<BuiltinBug> &BT) const;
+    void ReportBug(CheckerContext &Ctx, SourceRange range, std::unique_ptr<BugType> &BT) const;
     bool isRightCommaOperandAssignment(const Stmt *Statement) const;
     bool isFloatComparison(const Stmt *Statement) const;
 
@@ -28,7 +28,7 @@ namespace
 
 }  // namespace
 
-void AssignOrFloatCompInBranchCondChecker::ReportBug(CheckerContext &Ctx, SourceRange range, std::unique_ptr<BuiltinBug> &BT)
+void AssignOrFloatCompInBranchCondChecker::ReportBug(CheckerContext &Ctx, SourceRange range, std::unique_ptr<BugType> &BT)
     const
 {
   ExplodedNode *N = Ctx.generateErrorNode();
@@ -97,7 +97,7 @@ void AssignOrFloatCompInBranchCondChecker::checkBranchCondition(const Stmt *Cond
   if (isFloatComparison(Condition))
   {
     if (!floatCntBT)
-      floatCntBT.reset(new BuiltinBug(
+      floatCntBT.reset(new BugType(
           this,
           "Comparison of float values in branch condition can cause undefined "
           "behavior due to impreciseness of float comparison"));
@@ -110,7 +110,7 @@ void AssignOrFloatCompInBranchCondChecker::checkBranchCondition(const Stmt *Cond
   if (isRightCommaOperandAssignment(Condition))
   {
     if (!assignBT)
-      assignBT.reset(new BuiltinBug(this, "Controlling operand in condition statement is assignment"));
+      assignBT.reset(new BugType(this, "Controlling operand in condition statement is assignment"));
     const Expr *Ex = cast<Expr>(Condition);
     ReportBug(Ctx, Ex->getSourceRange(), assignBT);
   }
